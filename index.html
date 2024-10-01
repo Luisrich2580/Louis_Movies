@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loui Movies</title>
     <style>
-        /* Add the same CSS styles here from your PHP file */
+        /* Same styles as before */
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             margin: 0;
             padding: 0;
         }
+
         header {
             background-color: #333;
             color: #fff;
@@ -19,35 +21,27 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
         }
-        .page-description {
-            background-color: #fff;
-            padding: 20px;
-            margin: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+
+        nav {
+            display: flex;
+            gap: 15px;
         }
-        .page-description h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
         }
-        .page-description p {
-            font-size: 16px;
-            color: #555;
-            max-width: 800px;
-            margin: 0 auto;
-        }
+
         .search-container {
             display: flex;
             align-items: center;
         }
+
         .search-form {
             display: flex;
         }
+
         input[type="text"] {
             padding: 10px;
             font-size: 16px;
@@ -56,6 +50,7 @@
             border: 1px solid #ccc;
             margin-right: 10px;
         }
+
         button {
             padding: 10px;
             font-size: 16px;
@@ -65,12 +60,14 @@
             border: none;
             border-radius: 5px;
         }
+
         .movies-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 15px;
-            padding: 5px;
+            padding: 20px;
         }
+
         .movie-card {
             background-color: #fafafa;
             border-radius: 10px;
@@ -79,45 +76,41 @@
             overflow: hidden;
             transition: transform 0.2s;
             height: 600px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
+
         .movie-card img {
             width: 100%;
             height: 450px;
             object-fit: cover;
         }
+
         .movie-card h3 {
             font-size: 16px;
             margin: 10px 0;
-            padding: 0 10px;
         }
-        .movie-card p {
-            font-size: 12px;
-            color: #555;
-            padding: 0 10px 10px 10px;
-            height: 60px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+
         footer {
             background-color: #333;
             color: #fff;
             text-align: center;
-            padding: 10px 0;
+            padding: 10px;
             position: relative;
             bottom: 0;
             width: 100%;
-            margin-top: 20px;
         }
     </style>
 </head>
+
 <body>
 
     <!-- Header Section -->
     <header>
         <div class="logo">LOUI MOVIES</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="movies.html">Movies</a>
+            <a href="series.html">Series</a>
+        </nav>
         <div class="search-container">
             <form class="search-form" id="searchForm">
                 <input type="text" id="searchQuery" placeholder="Enter movie name..." required>
@@ -136,62 +129,56 @@
         &copy; 2024 Loui Movies
     </footer>
 
-    <!-- Script to handle movies and search -->
     <script>
-        // Example movie data (can be moved to a JSON file)
-        const movies = [
-            {
-                title: "Movie 1",
-                image: "movie1.jpg",
-                overview: "This is the overview of Movie 1."
-            },
-            {
-                title: "Movie 2",
-                image: "movie2.jpg",
-                overview: "This is the overview of Movie 2."
-            },
-            {
-                title: "Movie 3",
-                image: "movie3.jpg",
-                overview: "This is the overview of Movie 3."
-            },
-            {
-                title: "Movie 4",
-                image: "movie4.jpg",
-                overview: "This is the overview of Movie 4."
-            }
-            // Add more movies as needed
-        ];
+        const apiKey = 'your-api-key-here'; // Replace with your actual API key
+        const apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=' + apiKey + '&query=';
 
         const moviesGrid = document.getElementById('moviesGrid');
 
         // Function to display movies
-        function displayMovies(movieList) {
-            moviesGrid.innerHTML = '';
-            movieList.forEach(movie => {
+        function displayMovies(movies) {
+            moviesGrid.innerHTML = ''; // Clear the existing content
+            movies.forEach(movie => {
                 const movieCard = `
                     <div class="movie-card">
-                        <img src="${movie.image}" alt="${movie.title}">
+                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
                         <h3>${movie.title}</h3>
-                        <p>${movie.overview}</p>
+                        <p>${movie.overview.substring(0, 100)}...</p>
                     </div>
                 `;
                 moviesGrid.innerHTML += movieCard;
             });
         }
 
-        // Initial movie display
-        displayMovies(movies);
+        // Fetch movies from API
+        function fetchMovies(query) {
+            fetch(apiUrl + query)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        displayMovies(data.results);
+                    } else {
+                        moviesGrid.innerHTML = '<p>No movies found</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching movies:', error);
+                    moviesGrid.innerHTML = '<p>Something went wrong. Please try again later.</p>';
+                });
+        }
 
-        // Search functionality
+        // Search form functionality
         const searchForm = document.getElementById('searchForm');
-        searchForm.addEventListener('submit', function(event) {
+        searchForm.addEventListener('submit', function (event) {
             event.preventDefault();
-            const query = document.getElementById('searchQuery').value.toLowerCase();
-            const filteredMovies = movies.filter(movie => movie.title.toLowerCase().includes(query));
-            displayMovies(filteredMovies);
+            const query = document.getElementById('searchQuery').value;
+            fetchMovies(query);
         });
+
+        // Fetch initial popular movies or random movies (optional)
+        fetchMovies('popular'); // You can change this to any default query
     </script>
 
 </body>
+
 </html>
