@@ -131,7 +131,8 @@
 
     <script>
         const apiKey = 'your-api-key-here'; // Replace with your actual API key
-        const apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=' + apiKey + '&query=';
+        const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=`;
+        const popularMoviesUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`;
 
         const moviesGrid = document.getElementById('moviesGrid');
 
@@ -151,8 +152,8 @@
         }
 
         // Fetch movies from API
-        function fetchMovies(query) {
-            fetch(apiUrl + query)
+        function fetchMovies(url) {
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     if (data.results && data.results.length > 0) {
@@ -172,15 +173,14 @@
         searchForm.addEventListener('submit', function (event) {
             event.preventDefault();
             const query = document.getElementById('searchQuery').value;
-            fetchMovies(query);
+            const url = searchUrl + encodeURIComponent(query); // Safely encode the query
+            fetchMovies(url);
         });
 
-        // Fetch initial popular movies or random movies (optional)
-        fetchMovies('popular'); // You can change this to any default query
+        // Fetch popular movies by default
+        fetchMovies(popularMoviesUrl);
     </script>
 
 </body>
 
 </html>
-
-<!-- nothing -->
