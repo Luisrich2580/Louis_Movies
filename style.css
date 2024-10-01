@@ -1,0 +1,258 @@
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* General Header Styling */
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Logo Styling */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navbar Styling */
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar ul li {
+            margin: 0 15px;
+        }
+
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar ul li a:hover {
+            background-color: #555;
+        }
+
+        /* Search Container Styling */
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Search Form Styling */
+        .search-form {
+            display: flex;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        /* Error Message Styling */
+        .error {
+            color: red;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+
+        .page-description {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            /* Center the text */
+        }
+
+        .page-description h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .page-description p {
+            font-size: 16px;
+            color: #555;
+            max-width: 800px;
+            /* Control the width of the text */
+            margin: 0 auto;
+            /* Center the paragraph */
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            /* Width of the input */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+            /* Space between input and button */
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            /* Seven movies per row */
+            gap: 15px;
+            /* Spacing between cards */
+            padding: 5px;
+        }
+
+        .movie-card {
+            background-color: #fafafa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            overflow: hidden;
+            transition: transform 0.2s;
+            height: 600px;
+            /* Height to fit images */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /* Keeps title and overview at the bottom */
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 450px;
+            /* Image height */
+            object-fit: cover;
+            /* Ensures images maintain aspect ratio */
+        }
+
+        .movie-card h3 {
+            font-size: 16px;
+            /* Font size for title */
+            margin: 10px 0;
+            padding: 0 10px;
+        }
+
+        .movie-card p {
+            font-size: 12px;
+            /* Font size for movie overview */
+            color: #555;
+            padding: 0 10px 10px 10px;
+            height: 60px;
+            /* Fixed height for description */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .movies-grid {
+                grid-template-columns: repeat(4, 1fr);
+                /* Show 4 cards per row for medium screens */
+            }
+        }
+
+        @media (max-width: 900px) {
+            .movies-grid {
+                grid-template-columns: repeat(3, 1fr);
+                /* Show 3 cards per row for smaller tablets */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .movies-grid {
+                grid-template-columns: repeat(2, 1fr);
+                /* Show 2 cards per row for mobile devices */
+            }
+        }
+
+        @media (max-width: 400px) {
+            .movies-grid {
+                grid-template-columns: 1fr;
+                /* Show 1 card per row for very small screens */
+            }
+        }
+
+        /* Pagination Styling */
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .pagination-button {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .pagination-button:hover {
+            background-color: #555;
+        }
+
+        .pagination-button.active {
+            background-color: #555;
+            /* Highlight active page */
+            pointer-events: none;
+            /* Disable clicking on active */
+            color: #fff;
+        }
+
+
+        /* Footer Styling */
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 20px;
+        }
