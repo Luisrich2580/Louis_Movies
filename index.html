@@ -5,100 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loui Movies</title>
-    <style>
-        /* Same styles as before */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        nav {
-            display: flex;
-            gap: 15px;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .search-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .search-form {
-            display: flex;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-
-        button {
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-        }
-
-        .movies-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            padding: 20px;
-        }
-
-        .movie-card {
-            background-color: #fafafa;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            overflow: hidden;
-            transition: transform 0.2s;
-            height: 600px;
-        }
-
-        .movie-card img {
-            width: 100%;
-            height: 450px;
-            object-fit: cover;
-        }
-
-        .movie-card h3 {
-            font-size: 16px;
-            margin: 10px 0;
-        }
-
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    
 </head>
 
 <body>
@@ -119,10 +27,23 @@
         </div>
     </header>
 
+    <div class="page-description">
+        <h1>Welcome to Loui Movies!</h1>
+        <p>Your one-stop destination for the latest and greatest movies. Explore our collection, search for your favorites, and enjoy the cinematic experience!</p>
+    </div>
+   
+
     <!-- Movie List Section -->
     <section class="movies-grid" id="moviesGrid">
         <!-- JavaScript will populate movie cards here -->
     </section>
+    
+
+    <!-- Pagination Section -->
+    <div class="pagination" id="pagination">
+        <button class="pagination-button" id="prevPage" disabled>Previous</button>
+        <button class="pagination-button" id="nextPage">Next</button>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -130,15 +51,21 @@
     </footer>
 
     <script>
-        const apiKey = 'your-api-key-here'; // Replace with your actual API key
+        const apiKey = '9ae88cbf0e126575922d9262d6dbaccf'; // Replace with your actual API key
         const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=`;
         const popularMoviesUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`;
+        
+        let currentPage = 1;  // Track the current page
+        let totalPages = 1;  // Total pages available for the query
+        let currentQuery = '';  // Track the current search query
 
         const moviesGrid = document.getElementById('moviesGrid');
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
 
         // Function to display movies
         function displayMovies(movies) {
-            moviesGrid.innerHTML = ''; // Clear the existing content
+            moviesGrid.innerHTML = '';  // Clear the existing content
             movies.forEach(movie => {
                 const movieCard = `
                     <div class="movie-card">
@@ -158,6 +85,8 @@
                 .then(data => {
                     if (data.results && data.results.length > 0) {
                         displayMovies(data.results);
+                        totalPages = data.total_pages;  // Update the total pages available
+                        updatePagination();  // Update the pagination buttons
                     } else {
                         moviesGrid.innerHTML = '<p>No movies found</p>';
                     }
@@ -173,12 +102,44 @@
         searchForm.addEventListener('submit', function (event) {
             event.preventDefault();
             const query = document.getElementById('searchQuery').value;
-            const url = searchUrl + encodeURIComponent(query); // Safely encode the query
+            currentQuery = query;
+            currentPage = 1;  // Reset to page 1 for a new search
+            const url = `${searchUrl}${encodeURIComponent(query)}&page=${currentPage}`;  // Fetch first page of search results
             fetchMovies(url);
         });
 
         // Fetch popular movies by default
-        fetchMovies(popularMoviesUrl);
+        function fetchPopularMovies() {
+            const url = `${popularMoviesUrl}&page=${currentPage}`;
+            fetchMovies(url);
+        }
+
+        // Pagination functionality
+        function updatePagination() {
+            // Disable/enable the previous button
+            prevPageBtn.disabled = (currentPage === 1);
+            // Disable/enable the next button
+            nextPageBtn.disabled = (currentPage === totalPages);
+        }
+
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                const url = currentQuery ? `${searchUrl}${encodeURIComponent(currentQuery)}&page=${currentPage}` : `${popularMoviesUrl}&page=${currentPage}`;
+                fetchMovies(url);
+            }
+        });
+
+        nextPageBtn.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                const url = currentQuery ? `${searchUrl}${encodeURIComponent(currentQuery)}&page=${currentPage}` : `${popularMoviesUrl}&page=${currentPage}`;
+                fetchMovies(url);
+            }
+        });
+
+        // Fetch the initial set of popular movies
+        fetchPopularMovies();
     </script>
 
 </body>

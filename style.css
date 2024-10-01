@@ -18,6 +18,16 @@
             width: 100%;
         }
 
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+        }
+
         /* Logo Styling */
         .logo {
             font-size: 24px;
