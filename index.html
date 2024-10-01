@@ -6,7 +6,184 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loui Movies</title>
     <link rel="stylesheet" href="style.css">
-    
+    <style>
+        Style for the body and other elements
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styling */
+        /* header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; 
+        } */
+
+        /* nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ff6347; 
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-form {
+            display: flex;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        /* Page description styling */
+        /* .page-description {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .page-description h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .page-description p {
+            font-size: 16px;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto; 
+        } */
+
+        /* Movies grid styling */
+        /* .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .movie-card {
+            background-color: #fafafa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            overflow: hidden;
+            transition: transform 0.2s;
+            height: 600px;
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+        }
+
+        .movie-card h3 {
+            font-size: 16px;
+            margin: 10px 0;
+        } */ 
+
+        /* Pagination styling */
+        /* .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .pagination-button {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .pagination-button:hover {
+            background-color: #555;
+        }
+
+        .pagination-button.disabled {
+            background-color: #999;
+            pointer-events: none; 
+        }
+
+        /* Footer styling */
+        /* footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        } */
+
+        /* Responsive design */
+        @media (max-width: 900px) {
+            .movies-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .movies-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .movies-grid {
+                grid-template-columns: 1fr;
+            }
+            input[type="text"] {
+                width: 100%; /* Full width on small screens */
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -31,13 +208,11 @@
         <h1>Welcome to Loui Movies!</h1>
         <p>Your one-stop destination for the latest and greatest movies. Explore our collection, search for your favorites, and enjoy the cinematic experience!</p>
     </div>
-   
 
     <!-- Movie List Section -->
     <section class="movies-grid" id="moviesGrid">
         <!-- JavaScript will populate movie cards here -->
     </section>
-    
 
     <!-- Pagination Section -->
     <div class="pagination" id="pagination">
@@ -54,10 +229,10 @@
         const apiKey = '9ae88cbf0e126575922d9262d6dbaccf'; // Replace with your actual API key
         const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=`;
         const popularMoviesUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`;
-        
-        let currentPage = 1;  // Track the current page
-        let totalPages = 1;  // Total pages available for the query
-        let currentQuery = '';  // Track the current search query
+
+        let currentPage = 1; // Track the current page
+        let totalPages = 1; // Total pages available for the query
+        let currentQuery = ''; // Track the current search query
 
         const moviesGrid = document.getElementById('moviesGrid');
         const prevPageBtn = document.getElementById('prevPage');
@@ -65,10 +240,10 @@
 
         // Function to display movies
         function displayMovies(movies) {
-            moviesGrid.innerHTML = '';  // Clear the existing content
+            moviesGrid.innerHTML = ''; // Clear the existing content
             movies.forEach(movie => {
                 const movieCard = `
-                    <div class="movie-card">
+                    <div class="movie-card" onclick="location.href='movie-details.html?id=${movie.id}'">
                         <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
                         <h3>${movie.title}</h3>
                         <p>${movie.overview.substring(0, 100)}...</p>
@@ -85,8 +260,8 @@
                 .then(data => {
                     if (data.results && data.results.length > 0) {
                         displayMovies(data.results);
-                        totalPages = data.total_pages;  // Update the total pages available
-                        updatePagination();  // Update the pagination buttons
+                        totalPages = data.total_pages; // Update the total pages available
+                        updatePagination(); // Update the pagination buttons
                     } else {
                         moviesGrid.innerHTML = '<p>No movies found</p>';
                     }
@@ -103,8 +278,8 @@
             event.preventDefault();
             const query = document.getElementById('searchQuery').value;
             currentQuery = query;
-            currentPage = 1;  // Reset to page 1 for a new search
-            const url = `${searchUrl}${encodeURIComponent(query)}&page=${currentPage}`;  // Fetch first page of search results
+            currentPage = 1; // Reset to page 1 for a new search
+            const url = `${searchUrl}${encodeURIComponent(query)}&page=${currentPage}`; // Fetch first page of search results
             fetchMovies(url);
         });
 
@@ -116,9 +291,7 @@
 
         // Pagination functionality
         function updatePagination() {
-            // Disable/enable the previous button
             prevPageBtn.disabled = (currentPage === 1);
-            // Disable/enable the next button
             nextPageBtn.disabled = (currentPage === totalPages);
         }
 

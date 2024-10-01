@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .movie-details {
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-details img {
+            width: 250px;
+            border-radius: 10px;
+        }
+
+        .movie-info {
+            max-width: 500px;
+        }
+
+        .movie-info h2 {
+            font-size: 24px;
+        }
+
+        .movie-info p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">LOUI MOVIES</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="movies.html">Movies</a>
+            <a href="series.html">Series</a>
+        </nav>
+    </header>
+
+    <div class="movie-details" id="movieDetails">
+        <!-- JavaScript will populate movie details here -->
+    </div>
+
+    <footer>
+        &copy; 2024 Loui Movies
+    </footer>
+
+    <script>
+        const apiKey = '9ae88cbf0e126575922d9262d6dbaccf'; // Replace with your actual API key
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = urlParams.get('id'); // Get the movie ID from the URL
+
+        function fetchMovieDetails() {
+            const movieDetailsUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`;
+            fetch(movieDetailsUrl)
+                .then(response => response.json())
+                .then(movie => {
+                    displayMovieDetails(movie);
+                })
+                .catch(error => {
+                    console.error('Error fetching movie details:', error);
+                    document.getElementById('movieDetails').innerHTML = '<p>Something went wrong. Please try again later.</p>';
+                });
+        }
+
+        function displayMovieDetails(movie) {
+            const movieDetailsDiv = document.getElementById('movieDetails');
+            movieDetailsDiv.innerHTML = `
+                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                <div class="movie-info">
+                    <h2>${movie.title}</h2>
+                    <p><strong>Release Date:</strong> ${movie.release_date}</p>
+                    <p><strong>Rating:</strong> ${movie.vote_average}</p>
+                    <p><strong>Overview:</strong> ${movie.overview}</p>
+                </div>
+            `;
+        }
+
+        // Fetch movie details when the page loads
+        fetchMovieDetails();
+    </script>
+
+</body>
+
+</html>
